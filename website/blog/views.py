@@ -1,14 +1,18 @@
 from django.shortcuts import render
-from django.utils import timezone
+
+
 def dummy():
-    return "func working"
+    return "func working!"
+
 
 def index(request):
-    context = {
-        "title": "Blog",
-        "text": "HELLO WORLD!",
-        "colors": ["red", "blue", "green"],
-        "func": dummy,
-        "today": timezone.now(),
-    }
+    context = {}
     return render(request, "blog/index.html", context)
+
+
+def get_post(request):
+    context = {}
+    return render(request, "blog/post.html", context)
+def contact(request):
+    context = {}
+    return render(request, "blog/contact.html", context)
