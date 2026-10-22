@@ -1,13 +1,13 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top site-navbar" role="navigation">
-    <div class="container"><a class="navbar-brand" href="index.html"><span class="brand-mark">J.</span> JOURNAL<span
+    <div class="container"><a class="navbar-brand" href="{% url 'blog:index' %}"><span class="brand-mark">J.</span> JOURNAL<span
             class="brand-dot">.</span></a>
         <button aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                 data-bs-target="#mainNav" data-bs-toggle="collapse" type="button"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto gap-lg-3">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'blog:index' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:contact' %}">Contact</a></li>

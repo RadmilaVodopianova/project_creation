@@ -1,128 +1,232 @@
-import datetime
+
 from django.http import HttpResponse
+from datetime import datetime
 
 
-def page(title, content):
+def page_template(title, content):
     return f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport"
-                  content="width=device-width, initial-scale=1.0">
-            <title>{title}</title>
+    <!DOCTYPE html>
+    <html lang="uk">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{title}</title>
 
-            <style>
-                * {{
-                    box-sizing: border-box;
-                }}
+        <style>
+            * {{
+                box-sizing: border-box;
+            }}
 
-                body {{
-                    margin: 0;
-                    min-height: 100vh;
-                    background: linear-gradient(135deg, #fce7f3, #ede9fe);
-                    font-family: Arial, sans-serif;
-                    color: #352747;
-                }}
+            body {{
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #0f172a;
+                color: #f8fafc;
+            }}
 
+            nav {{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 22px 8%;
+                background: #1e293b;
+                border-bottom: 1px solid #334155;
+            }}
+
+            .logo {{
+                color: #38bdf8;
+                font-size: 24px;
+                font-weight: bold;
+            }}
+
+            nav a {{
+                color: #cbd5e1;
+                text-decoration: none;
+                margin-left: 25px;
+                transition: color 0.2s;
+            }}
+
+            nav a:hover {{
+                color: #38bdf8;
+            }}
+
+            main {{
+                max-width: 1050px;
+                margin: 80px auto;
+                padding: 0 25px;
+                text-align: center;
+            }}
+
+            h1 {{
+                font-size: 42px;
+                margin-bottom: 15px;
+            }}
+
+            .subtitle {{
+                color: #94a3b8;
+                font-size: 18px;
+                line-height: 1.7;
+            }}
+
+            .cards {{
+                display: flex;
+                gap: 20px;
+                margin-top: 45px;
+                flex-wrap: wrap;
+            }}
+
+            .card {{
+                flex: 1 1 220px;
+                background: #1e293b;
+                padding: 30px;
+                border-radius: 16px;
+                border: 1px solid #334155;
+                transition: transform 0.2s;
+            }}
+
+            .card:hover {{
+                transform: translateY(-5px);
+            }}
+
+            .card h2 {{
+                color: #38bdf8;
+            }}
+
+            .card p {{
+                color: #94a3b8;
+            }}
+
+            .button {{
+                display: inline-block;
+                background: #0284c7;
+                color: white;
+                padding: 14px 25px;
+                margin-top: 25px;
+                border-radius: 10px;
+                text-decoration: none;
+                font-weight: bold;
+            }}
+
+            .button:hover {{
+                background: #0369a1;
+            }}
+
+            .clock {{
+                font-size: 42px;
+                color: #38bdf8;
+                font-weight: bold;
+                margin: 30px 0;
+            }}
+
+            footer {{
+                text-align: center;
+                padding: 25px;
+                color: #64748b;
+            }}
+
+            @media (max-width: 600px) {{
                 nav {{
-                    display: flex;
-                    justify-content: center;
-                    flex-wrap: wrap;
-                    gap: 12px;
-                    padding: 25px 15px;
+                    flex-direction: column;
+                    gap: 18px;
                 }}
 
                 nav a {{
-                    padding: 12px 22px;
-                    background: white;
-                    color: #7c3aed;
-                    text-decoration: none;
-                    border-radius: 12px;
-                    transition: 0.3s;
-                }}
-
-                nav a:hover {{
-                    background: #7c3aed;
-                    color: white;
-                    transform: translateY(-3px);
-                }}
-
-                main {{
-                    display: flex;
-                    justify-content: center;
-                    padding: 60px 20px;
-                }}
-
-                .card {{
-                    width: 600px;
-                    max-width: 100%;
-                    padding: 45px 25px;
-                    text-align: center;
-                    background: white;
-                    border-radius: 24px;
-                    box-shadow: 0 15px 40px rgba(80, 40, 100, 0.15);
-                    overflow-wrap: anywhere;
+                    margin: 0 10px;
                 }}
 
                 h1 {{
-                    margin: 0 0 20px;
-                    font-size: clamp(28px, 5vw, 40px);
+                    font-size: 30px;
                 }}
 
-                p {{
-                    color: #756782;
-                    font-size: 18px;
-                    line-height: 1.6;
+                main {{
+                    margin: 45px auto;
                 }}
+            }}
+        </style>
+    </head>
 
-                .label {{
-                    color: #8b5cf6;
-                    font-size: 14px;
-                    font-weight: bold;
-                    letter-spacing: 3px;
-                }}
-            </style>
-        </head>
+    <body>
+        <nav>
+            <div class="logo">DjangoLab</div>
 
-        <body>
-            <nav>
-                <a href="/">Main</a>
-                <a href="/datetime/">Datetime</a>
-                <a href="/my-name/">My name</a>
-            </nav>
+            <div>
+                <a href="/">Головна</a>
+                <a href="/datetime/">Дата і час</a>
+            </div>
+        </nav>
 
-            <main>
-                <div class="card">
-                    {content}
-                </div>
-            </main>
-        </body>
-        </html>
+        <main>
+            {content}
+        </main>
+
+        <footer>
+            DjangoLab • Навчальний проєкт на Python
+        </footer>
+    </body>
+    </html>
     """
 
 
 def index(request):
-    return HttpResponse(page("Main", """
-        <p class="label">MY FIRST DJANGO WEBSITE</p>
-        <h1>Hello World!</h1>
-        <p>Welcome! Choose a page from the menu above.</p>
-    """))
+    content = """
+        <h1>Вітаємо у DjangoLab!</h1>
+
+        <p class="subtitle">
+            Мій перший вебзастосунок на Django.
+            Тут ми вивчаємо Python, маршрутизацію
+            та створення динамічних вебсторінок.
+        </p>
+
+        <div class="cards">
+            <div class="card">
+                <h2>Python</h2>
+                <p>Мова програмування для серверної логіки.</p>
+            </div>
+
+            <div class="card">
+                <h2>Django</h2>
+                <p>Потужний фреймворк для веброзробки.</p>
+            </div>
+
+            <div class="card">
+                <h2>Routing</h2>
+                <p>Керування URL-адресами нашого сайту.</p>
+            </div>
+        </div>
+
+        <a class="button" href="/datetime/">
+            Переглянути поточний час →
+        </a>
+    """
+
+    return HttpResponse(page_template("Головна | DjangoLab", content))
 
 
 def current_datetime(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
 
-    return HttpResponse(page("Datetime", f"""
-        <p class="label">DATE AND TIME</p>
-        <h1>Current datetime</h1>
-        <p>{now}</p>
-    """))
+    content = f"""
+        <h1>Поточна дата та час</h1>
 
+        <p class="subtitle">
+            Ця інформація генерується Python на сервері Django.
+        </p>
 
-def my_name(request):
-    return HttpResponse(page("My name", """
-        <p class="label">NICE TO MEET YOU</p>
-        <h1>My name is Radmila</h1>
-        <p>I am learning Python and Django!</p>
-    """))
+        <div class="card">
+            <h2>Сьогодні</h2>
+            <p>{now.strftime('%d.%m.%Y')}</p>
+
+            <div class="clock">
+                {now.strftime('%H:%M:%S')}
+            </div>
+
+            <p>Час оновлюється після перезавантаження сторінки.</p>
+        </div>
+
+        <a class="button" href="/">
+            ← Повернутися на головну
+        </a>
+    """
+
+    return HttpResponse(page_template("Дата і час | DjangoLab", content))
+
