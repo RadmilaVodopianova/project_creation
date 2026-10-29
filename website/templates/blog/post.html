@@ -1,36 +1,63 @@
+
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
+
 <!-- Blog Post -->
 <!-- Title -->
 <div class="eyebrow mb-3">FEATURED STORY / JOURNAL</div>
-<h1 class="article-title">Blog Post Title</h1>
+<h1 class="article-title">{{ post.title }}</h1>
+
 <!-- Author -->
 <p class="byline">
-    by <a href="#">Start Bootstrap</a>
+    by <a href="#">{{ post.user.username }}</a>
 </p>
+
 <hr class="soft-divider"/>
+
 <!-- Date/Time -->
-<p>◷ Posted on August 24, 2013 at 9:00 PM</p>
+<p>◷ Posted on {{ post.published_date|date:"d.m.Y H:i" }}</p>
+
 <hr class="soft-divider"/>
+
 <!-- Preview Image -->
-<img alt="Abstract editorial illustration" class="img-fluid feature-image" src="assets/feature.svg"/>
+<img alt="Abstract editorial illustration"
+     class="img-fluid feature-image"
+     src="{% static 'blog/assets/feature.svg' %}"/>
+
 <hr class="soft-divider"/>
+
 <!-- Post Content -->
-<p class="lead intro-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero,
-    obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos
-    magni recusandae laborum minus inventore?</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste
-    ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus,
-    voluptatibus.</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, doloribus, dolorem iusto blanditiis unde
-    eius illum consequuntur neque dicta incidunt ullam ea hic porro optio ratione repellat perspiciatis.
-    Enim, iure!</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat
-    totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam
-    tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae?
-    Qui, necessitatibus, est!</p>
+<div class="article-content">
+    {{ post.content|linebreaks }}
+</div>
+
+<!-- Category -->
+<p class="byline">
+    Категорія:
+    <a href="{% url 'blog:index' %}?category={{ post.category.slug }}">
+        {{ post.category.name }}
+    </a>
+</p>
+
+<!-- Tags -->
+<p class="byline">
+    Теги:
+    {% for tag in post.tags.all %}
+        <a href="{% url 'blog:index' %}?tag={{ tag.slug }}">
+            #{{ tag.name }}
+        </a>{% if not forloop.last %}, {% endif %}
+    {% empty %}
+        Без тегів
+    {% endfor %}
+</p>
+
+<p>
+    <a href="{% url 'blog:index' %}">← Усі публікації</a>
+</p>
+
 <hr class="soft-divider"/>
+
 <!-- Blog Comments -->
 <!-- Comments Form -->
 <div class="comment-box">
@@ -39,48 +66,67 @@
           onsubmit='event.preventDefault(); this.querySelector("textarea").value=""; this.querySelector(".form-feedback").textContent="Thanks! This demo does not save comments.";'
           role="form">
         <div class="form-group">
-                        <textarea aria-label="Comment" class="form-control" placeholder="Share your thoughts..."
-                                  rows="3"></textarea>
+            <textarea aria-label="Comment"
+                      class="form-control"
+                      placeholder="Share your thoughts..."
+                      rows="3"></textarea>
         </div>
         <button class="btn btn-accent" type="submit">Submit</button>
-        <p class="form-feedback mt-2"></p></form>
+        <p class="form-feedback mt-2"></p>
+    </form>
 </div>
+
 <hr class="soft-divider"/>
+
 <!-- Posted Comments -->
 <!-- Comment -->
 <div class="comment-item">
     <a class="avatar-wrap" href="#">
-        <img alt="Comment author avatar" class="avatar" src="assets/avatar.svg"/>
+        <img alt="Comment author avatar"
+             class="avatar"
+             src="{% static 'blog/assets/avatar.svg' %}"/>
     </a>
     <div class="comment-body">
         <h4 class="comment-author">Start Bootstrap
-            <small class="comment-date">August 25, 2014 at 9:30 PM</small>
+            <small class="comment-date">
+                August 25, 2014 at 9:30 PM
+            </small>
         </h4>
         Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo.
         Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
         vulputate fringilla. Donec lacinia congue felis in faucibus.
     </div>
 </div>
+
 <!-- Comment -->
 <div class="comment-item">
     <a class="avatar-wrap" href="#">
-        <img alt="Comment author avatar" class="avatar" src="assets/avatar.svg"/>
+        <img alt="Comment author avatar"
+             class="avatar"
+             src="{% static 'blog/assets/avatar.svg' %}"/>
     </a>
     <div class="comment-body">
         <h4 class="comment-author">Start Bootstrap
-            <small class="comment-date">August 25, 2014 at 9:30 PM</small>
+            <small class="comment-date">
+                August 25, 2014 at 9:30 PM
+            </small>
         </h4>
         Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo.
         Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
         vulputate fringilla. Donec lacinia congue felis in faucibus.
+
         <!-- Nested Comment -->
         <div class="comment-item">
             <a class="avatar-wrap" href="#">
-                <img alt="Comment author avatar" class="avatar" src="assets/avatar.svg"/>
+                <img alt="Comment author avatar"
+                     class="avatar"
+                     src="{% static 'blog/assets/avatar.svg' %}"/>
             </a>
             <div class="comment-body">
                 <h4 class="comment-author">Nested Start Bootstrap
-                    <small class="comment-date">August 25, 2014 at 9:30 PM</small>
+                    <small class="comment-date">
+                        August 25, 2014 at 9:30 PM
+                    </small>
                 </h4>
                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin
                 commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce
@@ -90,4 +136,5 @@
         <!-- End Nested Comment -->
     </div>
 </div>
+
 {% endblock %}

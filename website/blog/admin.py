@@ -11,6 +11,7 @@ class PostAdmin(admin.ModelAdmin):
         "user",
         "published_date",
         "content_length",
+        "slug",
     ]
     search_fields = ["title", "content"]
     list_filter = ["category", "published_date"]
@@ -25,14 +26,14 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["id", "name"]
+    list_display = ["id", "name", "slug"]
     search_fields = ["name"]
     ordering = ["name"]
 
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ["id", "name"]
+    list_display = ["id", "name", "slug"]
     search_fields = ["name"]
     ordering = ["name"]
 

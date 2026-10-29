@@ -34,7 +34,7 @@
                     <input aria-label="Search articles" class="form-control" placeholder="Search articles..."
                            type="text"/>
 
-                    <button class="btn btn-search" type="button">Search</button>
+                    <button class="btn btn-search" type="button" onclick="searchPosts()">Search</button>
 
                 </div>
                 <!-- /.input-group -->
@@ -45,32 +45,37 @@
                 <div class="row g-2">
                     <div class="col-6">
                         <ul class="list-unstyled category-list">
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
+                            {% for category in categories %}
+                                <li><a href="{% url 'blog:index' %}?category={{ category.pk }}">{{ category.name }}</a></li>
+                            {% empty %}
+                                <li>Поки що немає категорій</li>
+                            {% endfor %}
                         </ul>
                     </div>
                     <!-- /.col-lg-6 -->
                     <div class="col-6">
                         <ul class="list-unstyled category-list">
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
-                            <li><a href="#">Category Name</a>
-                            </li>
+                            <li><a href="{% url 'blog:index' %}">Усі публікації</a></li>
                         </ul>
                     </div>
                     <!-- /.col-lg-6 -->
                 </div>
                 <!-- /.row -->
+            </div>
+            <!-- Blog Tags -->
+            <div class="sidebar-card">
+                <h4 class="sidebar-heading">Blog Tags</h4>
+                <div class="row g-2">
+                    <div class="col-12">
+                        <ul class="list-unstyled category-list">
+                            {% for tag in tags %}
+                                <li><a href="{% url 'blog:index' %}?tag={{ tag.pk }}">{{ tag.name }}</a></li>
+                            {% empty %}
+                                <li>Поки що немає тегів</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
             <!-- Side Widget Well -->
             <div class="sidebar-card">
@@ -94,32 +99,22 @@
 <!-- Bootstrap Core JavaScript -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>function searchPosts() {
-    const q = document.querySelector('.sidebar-card input').value.trim().toLowerCase();
-    const cards = [...document.querySelectorAll('.post-card')];
-    if (!cards.length) {
-        window.location.href = 'index.html' + (q ? '?q=' + encodeURIComponent(q) : '');
-        return;
-    }
-    cards.forEach(c => {
-        c.hidden = !!q && !c.textContent.toLowerCase().includes(q)
-    });
-    let status = document.getElementById('searchStatus');
-    if (!status) {
-        status = document.createElement('p');
-        status.id = 'searchStatus';
-        status.className = 'search-status';
-        document.querySelector('.sidebar-card').append(status)
-    }
-    status.textContent = q ? cards.filter(c => !c.hidden).length + ' matching articles' : '';
+<script>
+function searchPosts() {
+    const q = document.querySelector('.sidebar-card input').value.trim();
+    window.location.href = "{% url 'blog:index' %}" + (q ? '?q=' + encodeURIComponent(q) : '');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const q = new URLSearchParams(location.search).get('q');
-    if (q && document.querySelector('.post-card')) {
-        document.querySelector('.sidebar-card input').value = q;
-        searchPosts()
+    if (q) {
+        const input = document.querySelector('.sidebar-card input');
+        if (input) input.value = q;
     }
+    const input = document.querySelector('.sidebar-card input');
+    if (input) input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') searchPosts();
+    });
 });</script>
 </body>
 </html>
