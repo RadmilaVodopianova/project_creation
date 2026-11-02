@@ -1,9 +1,10 @@
-
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 from .models import Post, Category, Tag
+from .forms import CommentForm
 
 
 def dummy():
@@ -60,17 +61,36 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
-def get_post(request, post_slug):
+def post_detail(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
+    comments = post.comments.select_related('author').all()
+
+    form = CommentForm()
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect('admin:login')
+
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+
+            return redirect('blog:post', post_slug=post.slug)
 
     context = {
         'post': post,
+        'comments': comments,
+        'form': form,
         'tags': Tag.objects.all(),
     }
 
     context.update(get_categories())
 
-    return render(request, 'blog/post.html', context)
+    return render(request, 'blog/post_detail.html', context)
 
 
 def contact(request):
@@ -81,3 +101,23 @@ def contact(request):
     context.update(get_categories())
 
     return render(request, 'blog/contact.html', context)
+
+
+def profile_detail(request, user_id):
+    author = get_object_or_404(User, pk=user_id)
+
+    posts = Post.objects.filter(
+        user=author
+    ).select_related(
+        'category', 'user'
+    ).prefetch_related('tags')
+
+    context = {
+        'author': author,
+        'posts': posts,
+        'tags': Tag.objects.all(),
+    }
+
+    context.update(get_categories())
+
+    return render(request, 'blog/profile_detail.html', context)

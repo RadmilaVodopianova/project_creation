@@ -158,3 +158,30 @@ class Profile(models.Model):
     class Meta:
         verbose_name = "Профіль"
         verbose_name_plural = "Профілі"
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Публікація',
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Автор',
+    )
+    text = models.TextField(
+        verbose_name='Текст',
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата створення',
+    )
+
+    def __str__(self):
+        return f'{self.author.username}: {self.text[:50]}'
+
+    class Meta:
+        ordering = ['created_at']
+        verbose_name = 'Коментар'
+        verbose_name_plural = 'Коментарі'
