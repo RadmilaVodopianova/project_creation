@@ -94,6 +94,11 @@ class Post(models.Model):
     content = models.TextField(
         verbose_name="Вміст",
     )
+    image = models.ImageField(
+        upload_to='posts/%Y/%m/',
+        blank=True,
+        verbose_name='Зображення',
+    )
     published_date = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата публікації",

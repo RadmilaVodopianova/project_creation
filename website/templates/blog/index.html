@@ -28,14 +28,20 @@
 
     <p>◷ Posted on {{ post.published_date|date:"d.m.Y H:i" }}</p>
 
+    {% if post.image %}
+    <img alt="{{ post.title }}"
+         class="img-fluid feature-image"
+         src="{{ post.image.url }}"/>
+    {% else %}
     <img alt="Abstract editorial illustration"
          class="img-fluid feature-image"
          src="{% static 'blog/assets/feature.svg' %}"/>
+    {% endif %}
 
     <p>{{ post.content|truncatewords:20 }}</p>
 
     <p class="byline">
-        <a href="{% url 'blog:index' %}?category={{ post.category.slug }}">
+        <a href="{% url 'blog:index' %}?category={{ post.category_id }}">
             {{ post.category.name }}
         </a>
 

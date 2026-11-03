@@ -7,6 +7,12 @@
 <div class="eyebrow mb-3">FEATURED STORY / JOURNAL</div>
 <h1 class="article-title">{{ post.title }}</h1>
 
+{% if user.is_authenticated and user.id == post.user_id %}
+    <p>
+        <a class="btn btn-accent" href="{% url 'blog:post_update' post.slug %}">Редагувати</a>
+    </p>
+{% endif %}
+
 <!-- Author -->
 <p class="byline">
     Автор:
@@ -23,9 +29,15 @@
 <hr class="soft-divider"/>
 
 <!-- Preview Image -->
+{% if post.image %}
+<img alt="{{ post.title }}"
+     class="img-fluid feature-image"
+     src="{{ post.image.url }}"/>
+{% else %}
 <img alt="Abstract editorial illustration"
      class="img-fluid feature-image"
      src="{% static 'blog/assets/feature.svg' %}"/>
+{% endif %}
 
 <hr class="soft-divider"/>
 
@@ -37,7 +49,7 @@
 <!-- Category -->
 <p class="byline">
     Категорія:
-    <a href="{% url 'blog:index' %}?category={{ post.category.slug }}">
+    <a href="{% url 'blog:index' %}?category={{ post.category_id }}">
         {{ post.category.name }}
     </a>
 </p>

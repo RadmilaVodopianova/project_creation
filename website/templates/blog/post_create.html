@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="article-title">Створити публікацію</h1>
+
+<form method="post" enctype="multipart/form-data" action="{% url 'blog:post_create' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-accent" type="submit">Опублікувати</button>
+    <a class="btn btn-outline-secondary" href="{% url 'blog:index' %}">Скасувати</a>
+</form>
+{% endblock %}

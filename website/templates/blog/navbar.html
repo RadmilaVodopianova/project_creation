@@ -8,6 +8,9 @@
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto gap-lg-3">
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:index' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blog:post_create' %}">Створити публікацію</a></li>
+                {% endif %}
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'blog:contact' %}">Contact</a></li>

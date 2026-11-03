@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="article-title">Редагувати публікацію</h1>
+
+<form method="post" enctype="multipart/form-data" action="{% url 'blog:post_update' post.slug %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-accent" type="submit">Зберегти зміни</button>
+    <a class="btn btn-outline-secondary" href="{% url 'blog:post' post.slug %}">Скасувати</a>
+</form>
+{% endblock %}
