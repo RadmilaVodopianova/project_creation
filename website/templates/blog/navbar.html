@@ -1,19 +1,75 @@
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top site-navbar" role="navigation">
-    <div class="container"><a class="navbar-brand" href="{% url 'blog:index' %}"><span class="brand-mark">J.</span> JOURNAL<span
-            class="brand-dot">.</span></a>
-        <button aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
-                data-bs-target="#mainNav" data-bs-toggle="collapse" type="button"><span
-                class="navbar-toggler-icon"></span></button>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top site-navbar">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'blog:index' %}">
+            <span class="brand-mark">J.</span>
+            JOURNAL<span class="brand-dot">.</span>
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNav"
+                aria-controls="mainNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav ms-auto gap-lg-3">
-                <li class="nav-item"><a class="nav-link" href="{% url 'blog:index' %}">Home</a></li>
+            <ul class="navbar-nav ms-auto gap-lg-3 align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blog:index' %}">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blog:contact' %}">
+                        Contact
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blog:post_create' %}">
+                        Create post
+                    </a>
+                </li>
+
                 {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'blog:post_create' %}">Створити публікацію</a></li>
+                    <li class="nav-item">
+                        <span class="navbar-text">
+                            Hello, {{ user.username }}!
+                        </span>
+                    </li>
+
+                    <li class="nav-item">
+                        <form method="post"
+                              action="{% url 'blog:logout' %}"
+                              class="m-0">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-outline-light">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-primary"
+                           href="{% url 'blog:register' %}">
+                            Register
+                        </a>
+                    </li>
                 {% endif %}
-                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'blog:contact' %}">Contact</a></li>
             </ul>
         </div>
     </div>

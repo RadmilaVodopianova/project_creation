@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -9,8 +10,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from .models import Post, Category, Tag
-from .forms import CommentForm, PostForm, SubscriberForm
-
+from .forms import CommentForm, PostForm, SubscriberForm, RegisterForm
+from django.contrib.auth import login
 
 def dummy():
     return "func working!"
@@ -193,3 +194,16 @@ def post_update(request, post_slug):
     }
     context.update(get_categories())
     return render(request, 'blog/post_update.html', context)
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('/')
+    else:
+        form = RegisterForm()
+    return render(request, 'blog/register.html', {'form': form})
