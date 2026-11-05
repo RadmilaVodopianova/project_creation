@@ -1,19 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="page-title">Підписка на новини блогу</h1>
-{% for message in messages %}
-    <div class="alert alert-success" role="status">{{ message }}</div>
-{% endfor %}
-<div class="comment-box">
-    <form method="post" action="{% url 'blog:subscribe' %}">
+<section class="form-panel auth-panel">
+    <span class="eyebrow">JOURNAL / ЗАЛИШАЙМОСЯ НА ЗВ’ЯЗКУ</span>
+    <h1 class="form-heading">Нові історії — на пошту</h1>
+    <p class="form-intro">Підпишіться на новини нашого блогу.</p>
+    {% for message in messages %}
+        <div class="alert alert-success" role="status">{{ message }}</div>
+    {% endfor %}
+    <form method="post" action="{% url 'blog:subscribe' %}" class="journal-form">
         {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="form-group">
-            {{ form.email.label_tag }}
-            {{ form.email }}
-            {{ form.email.errors }}
-        </div>
-        <button class="btn btn-accent mt-3" type="submit">Підписатися</button>
+        {% include 'blog/includes/form_fields.html' %}
+        <button class="btn btn-accent form-submit" type="submit">Підписатися</button>
     </form>
-</div>
+</section>
 {% endblock %}

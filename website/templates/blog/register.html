@@ -1,20 +1,14 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2>Реєстрація</h2>
-
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-
-                <button type="submit" class="btn btn-primary">
-                    Зареєструватися
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
+<section class="form-panel auth-panel" aria-labelledby="register-title">
+    <span class="eyebrow">JOURNAL / ПРИЄДНУЙТЕСЯ</span>
+    <h1 id="register-title" class="form-heading">Створіть свій акаунт</h1>
+    <p class="form-intro">Діліться думками, публікуйте історії та знаходьте натхнення.</p>
+    <form method="post" class="journal-form">
+        {% csrf_token %}
+        {% include 'blog/includes/form_fields.html' %}
+        <button type="submit" class="btn btn-accent form-submit">Зареєструватися</button>
+    </form>
+    <p class="form-footer">Уже є акаунт? <a href="{% url 'blog:login' %}">Увійти</a></p>
+</section>
 {% endblock %}

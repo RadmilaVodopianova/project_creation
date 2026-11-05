@@ -1,33 +1,21 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .forms import LoginForm
 
 app_name = 'blog'
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('subscribe/', views.subscribe, name='subscribe'),
-
     path('post/create/', views.post_create, name='post_create'),
-    path(
-        'post/<slug:post_slug>/edit/',
-        views.post_update,
-        name='post_update',
-    ),
+    path('post/<slug:post_slug>/edit/', views.post_update,name='post_update',),
     path('post/<slug:post_slug>/', views.post_detail, name='post'),
     path('post/', views.index, name='post_detail'),
-
     path('contact/', views.contact, name='contact'),
-    path(
-        'profile/<int:user_id>/',
-        views.profile_detail,
-        name='profile_detail',
-    ),
-
+    path('profile/edit/', views.profile_edit, name='profile_edit'),
+    path('profile/<int:user_id>/',views.profile_detail,name='profile_detail',),
     path('register/', views.register, name='register'),
-    path(
-        'logout/',
-        auth_views.LogoutView.as_view(next_page='blog:index'),
-        name='logout',
-    ),
+    path('login/', auth_views.LoginView.as_view(template_name='blog/login.html', authentication_form=LoginForm, next_page='blog:index'), name='login'),
+    path('logout/',auth_views.LogoutView.as_view(next_page='blog:index'),name='logout',),
 ]

@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h1 class="article-title">Створити публікацію</h1>
-
-<form method="post" enctype="multipart/form-data" action="{% url 'blog:post_create' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-accent" type="submit">Опублікувати</button>
-    <a class="btn btn-outline-secondary" href="{% url 'blog:index' %}">Скасувати</a>
-</form>
+<section class="form-panel">
+    <span class="eyebrow">JOURNAL / ВАША ІСТОРІЯ</span>
+    <h1 class="form-heading">Нова публікація</h1>
+    <p class="form-intro">У кожної історії є початок. Напишіть свій.</p>
+    <form method="post" enctype="multipart/form-data" action="{% url 'blog:post_create' %}" class="journal-form">
+        {% csrf_token %}
+        {% include 'blog/includes/form_fields.html' %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-accent">Опублікувати</button>
+            <a class="btn btn-outline-secondary" href="{% url 'blog:index' %}">Скасувати</a>
+        </div>
+    </form>
+</section>
 {% endblock %}

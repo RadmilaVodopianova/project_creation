@@ -46,9 +46,9 @@
 
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="navbar-text">
+                        <a class="nav-link" href="{% url 'blog:profile_detail' user.pk %}">
                             Hello, {{ user.username }}!
-                        </span>
+                        </a>
                     </li>
 
                     <li class="nav-item">
@@ -63,6 +63,13 @@
                         </form>
                     </li>
                 {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light"
+                           href="{% url 'blog:login' %}">
+                            Login
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="btn btn-primary"
                            href="{% url 'blog:register' %}">

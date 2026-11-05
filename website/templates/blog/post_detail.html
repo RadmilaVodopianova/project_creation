@@ -78,19 +78,12 @@
     <h4>Залишити коментар</h4>
 
     {% if user.is_authenticated %}
-        <form class="comment-form"
+        <form class="comment-form journal-form"
               method="post"
               action="{% url 'blog:post' post.slug %}">
             {% csrf_token %}
 
-            {{ form.non_field_errors }}
-
-            <div class="form-group">
-                {{ form.text.label_tag }}
-                {{ form.text }}
-                <p class="form-text">{{ form.text.help_text }}</p>
-                {{ form.text.errors }}
-            </div>
+            {% include 'blog/includes/form_fields.html' %}
 
             <button class="btn btn-accent mt-3" type="submit">
                 Опублікувати
@@ -100,7 +93,7 @@
         <p>Щоб залишити коментар, увійдіть у свій обліковий запис.</p>
 
         <a class="btn btn-accent"
-           href="{% url 'admin:login' %}?next={{ request.path|urlencode }}">
+           href="{% url 'blog:login' %}?next={{ request.path|urlencode }}">
             Увійти
         </a>
     {% endif %}

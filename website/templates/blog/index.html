@@ -61,14 +61,51 @@
     <p>Публікацій поки немає</p>
 {% endfor %}
 
-<!-- Pager -->
-<ul class="pager d-flex justify-content-between list-unstyled mt-4">
-    <li class="previous">
-        <a class="pager-link" href="#">← Older</a>
-    </li>
-    <li class="next">
-        <a class="pager-link" href="#">Newer →</a>
-    </li>
-</ul>
+{% if paginator.count %}
+<div class="pagination-summary">
+    Показано {{ page_obj.start_index }}–{{ page_obj.end_index }}
+    із {{ paginator.count }} публікацій
+</div>
+{% endif %}
+
+{% if is_paginated %}
+<nav class="pagination-bar" aria-label="Сторінки публікацій">
+    {% if page_obj.has_previous %}
+        <a class="page-control"
+           href="?{% if pagination_query %}{{ pagination_query }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">
+            ← Назад
+        </a>
+    {% else %}
+        <span class="page-control is-disabled" aria-disabled="true">← Назад</span>
+    {% endif %}
+
+    <ul class="page-numbers">
+        {% for number in page_numbers %}
+            <li>
+                {% if number == paginator.ELLIPSIS %}
+                    <span class="page-ellipsis">{{ number }}</span>
+                {% elif number == page_obj.number %}
+                    <span class="page-number is-current"
+                          aria-current="page"
+                          aria-label="Поточна сторінка {{ number }}">{{ number }}</span>
+                {% else %}
+                    <a class="page-number"
+                       aria-label="Сторінка {{ number }}"
+                       href="?{% if pagination_query %}{{ pagination_query }}&amp;{% endif %}page={{ number }}">{{ number }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if page_obj.has_next %}
+        <a class="page-control"
+           href="?{% if pagination_query %}{{ pagination_query }}&amp;{% endif %}page={{ page_obj.next_page_number }}">
+            Далі →
+        </a>
+    {% else %}
+        <span class="page-control is-disabled" aria-disabled="true">Далі →</span>
+    {% endif %}
+</nav>
+{% endif %}
 
 {% endblock %}

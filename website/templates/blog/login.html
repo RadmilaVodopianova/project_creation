@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="form-panel auth-panel" aria-labelledby="login-title">
+    <span class="eyebrow">JOURNAL / АКАУНТ</span>
+    <h1 id="login-title" class="form-heading">З поверненням</h1>
+    <p class="form-intro">Увійдіть, щоб публікувати свої історії та залишати коментарі.</p>
+    <form method="post" class="journal-form">
+        {% csrf_token %}
+        {% include 'blog/includes/form_fields.html' %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button type="submit" class="btn btn-accent form-submit">Увійти</button>
+    </form>
+    <p class="form-footer">Ще немає акаунта? <a href="{% url 'blog:register' %}">Зареєструватися</a></p>
+</section>
+{% endblock %}

@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h1 class="article-title">Редагувати публікацію</h1>
-
-<form method="post" enctype="multipart/form-data" action="{% url 'blog:post_update' post.slug %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-accent" type="submit">Зберегти зміни</button>
-    <a class="btn btn-outline-secondary" href="{% url 'blog:post' post.slug %}">Скасувати</a>
-</form>
+<section class="form-panel">
+    <span class="eyebrow">JOURNAL / ВАША ІСТОРІЯ</span>
+    <h1 class="form-heading">Редагувати публікацію</h1>
+    <p class="form-intro">Відшліфуйте текст і збережіть зміни.</p>
+    <form method="post" enctype="multipart/form-data" action="{% url 'blog:post_update' post.slug %}" class="journal-form">
+        {% csrf_token %}
+        {% include 'blog/includes/form_fields.html' %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-accent">Зберегти зміни</button>
+            <a class="btn btn-outline-secondary" href="{% url 'blog:post' post.slug %}">Скасувати</a>
+        </div>
+    </form>
+</section>
 {% endblock %}
