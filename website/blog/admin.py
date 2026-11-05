@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, Category, Tag, Profile, Comment
+from .models import Post, Category, Tag, Profile, Comment, Subscriber
 
 
 @admin.register(Post)
@@ -49,3 +49,11 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('author', 'post', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('text', 'author__username', 'post__title')
+
+
+@admin.register(Subscriber)
+class SubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'created_at')
+    search_fields = ('email',)
+    list_filter = ('created_at',)
+    readonly_fields = ('created_at',)

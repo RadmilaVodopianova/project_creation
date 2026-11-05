@@ -88,11 +88,12 @@
             <div class="form-group">
                 {{ form.text.label_tag }}
                 {{ form.text }}
+                <p class="form-text">{{ form.text.help_text }}</p>
                 {{ form.text.errors }}
             </div>
 
             <button class="btn btn-accent mt-3" type="submit">
-                Надіслати
+                Опублікувати
             </button>
         </form>
     {% else %}

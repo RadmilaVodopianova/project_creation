@@ -1,6 +1,8 @@
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.validators import MinLengthValidator
+from django.db.models.functions import Lower
 from slugify import slugify
 
 
@@ -177,6 +179,8 @@ class Comment(models.Model):
     )
     text = models.TextField(
         verbose_name='Текст',
+        max_length=500,
+        validators=[MinLengthValidator(5)],
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -187,6 +191,22 @@ class Comment(models.Model):
         return f'{self.author.username}: {self.text[:50]}'
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at', '-pk']
         verbose_name = 'Коментар'
         verbose_name_plural = 'Коментарі'
+
+
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True, verbose_name='Email')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата підписки')
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        ordering = ['-created_at', '-pk']
+        verbose_name = 'Підписник'
+        verbose_name_plural = 'Підписники'
+        constraints = [
+            models.UniqueConstraint(Lower('email'), name='subscriber_email_case_insensitive'),
+        ]

@@ -2,9 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.views import redirect_to_login
+from django.db import IntegrityError, transaction
+from django.urls import reverse
+from django.views.decorators.http import require_http_methods
 
 from .models import Post, Category, Tag
-from .forms import CommentForm, PostForm
+from .forms import CommentForm, PostForm, SubscriberForm
 
 
 def dummy():
@@ -68,6 +73,7 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
+@require_http_methods(['GET', 'POST'])
 def post_detail(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
     comments = post.comments.select_related('author').all()
@@ -76,7 +82,7 @@ def post_detail(request, post_slug):
 
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            return redirect('admin:login')
+            return redirect_to_login(request.get_full_path(), reverse('admin:login'))
 
         form = CommentForm(request.POST)
 
@@ -98,6 +104,23 @@ def post_detail(request, post_slug):
     context.update(get_categories())
 
     return render(request, 'blog/post_detail.html', context)
+
+
+@require_http_methods(['GET', 'POST'])
+def subscribe(request):
+    form = SubscriberForm(request.POST if request.method == 'POST' else None)
+    if request.method == 'POST' and form.is_valid():
+        try:
+            with transaction.atomic():
+                form.save()
+        except IntegrityError:
+            form.add_error('email', 'Ця електронна адреса вже підписана.')
+        else:
+            messages.success(request, 'Ви успішно підписалися!')
+            return redirect('blog:subscribe')
+    context = {'form': form, 'tags': Tag.objects.all()}
+    context.update(get_categories())
+    return render(request, 'blog/subscribe.html', context)
 
 
 def contact(request):

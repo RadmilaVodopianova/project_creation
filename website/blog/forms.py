@@ -1,9 +1,23 @@
 from django import forms
 
-from .models import Comment, Post
+from .models import Comment, Post, Subscriber
 
 
 class CommentForm(forms.ModelForm):
+    text = forms.CharField(
+        label='Ваш коментар', min_length=5, max_length=500, strip=True,
+        help_text='Від 5 до 500 символів. Пробіли на початку та в кінці не враховуються.',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control', 'rows': 3, 'minlength': 5, 'maxlength': 500,
+            'placeholder': 'Напишіть свій коментар...',
+        }),
+        error_messages={
+            'required': 'Коментар не може бути порожнім або складатися лише з пробілів.',
+            'min_length': 'Коментар має містити щонайменше 5 символів.',
+            'max_length': 'Коментар має містити не більше 500 символів.',
+        },
+    )
+
     class Meta:
         model = Comment
         fields = ['text']
@@ -19,6 +33,28 @@ class CommentForm(forms.ModelForm):
                 'rows': 3,
             }),
         }
+
+
+class SubscriberForm(forms.ModelForm):
+    class Meta:
+        model = Subscriber
+        fields = ['email']
+        labels = {'email': 'Ваша електронна адреса'}
+        widgets = {'email': forms.EmailInput(attrs={
+            'class': 'form-control', 'placeholder': 'name@example.com',
+            'autocomplete': 'email',
+        })}
+        error_messages = {'email': {
+            'required': 'Введіть електронну адресу.',
+            'invalid': 'Введіть коректну електронну адресу.',
+            'unique': 'Ця електронна адреса вже підписана.',
+        }}
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].strip().lower()
+        if Subscriber.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError('Ця електронна адреса вже підписана.')
+        return email
 
 
 class PostForm(forms.ModelForm):
